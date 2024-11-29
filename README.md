@@ -1,3 +1,102 @@
+# ⚠️ INFO ⚠️
+
+This fork is an example for blog post ...TODO...
+
+Main changes:
+- add YAML support for inputs
+- automatic meta sending to the dispatched workflow
+- allow sending additional inputs through the `meta` field
+
+## YAML support for inputs
+
+Original action supports setting inputs only as JSON string:
+```yaml
+- name: Invoke workflow in another repo with inputs
+  uses: the-actions-org/workflow-dispatch@v4
+  with:
+    workflow: Some Workflow
+    repo: benc-uk/example
+    token: ${{ secrets.PERSONAL_TOKEN }}
+    inputs: '{ "message": "blah blah", "debug": true }'
+```
+
+This fork supports setting inputs as YAML string:
+```yaml
+- name: Invoke workflow in another repo with inputs
+  uses: the-actions-org/workflow-dispatch@v4
+  with:
+    workflow: Some Workflow
+    repo: benc-uk/example
+    token: ${{ secrets.PERSONAL_TOKEN }}
+    inputs: |
+      message: "blah blah"
+      debug: true
+```
+
+# Automatic meta sending to the dispatched workflow
+
+This fork reserves one `meta` when sending inputs to the dispatched workflow. 
+This `meta` is automatically filled with the following data:
+```javascript
+{
+    workflow_name: 'WoorkflowFileName.yaml',
+    workflow_url: 'URL to the dispatcher workflow run that dispatched this workflow',
+    workflow_repo: 'name of the repository where the dispatcher workflow is located'
+}
+```
+
+Dispatched workflow is then able to access this data by using `fromJson` function:
+```yaml
+  parent-info:
+    name: Parent Info
+    if: ${{ inputs.meta != '' && fromJSON(inputs.meta).workflow_name != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show parent info
+        run: |
+          echo "Dispatched from [${{ fromJSON(inputs.meta).workflow_name }}](${{ fromJSON(inputs.meta).workflow_url }})"
+```
+
+## Allow sending additional inputs through the `meta` field
+
+This fork allows sending additional inputs to the dispatched workflow through the `meta` field.
+```yaml
+- name: Invoke workflow in another repo with inputs
+  uses: the-actions-org/workflow-dispatch@v4
+  with:
+    workflow: Some Workflow
+    repo: benc-uk/example
+    token: ${{ secrets.PERSONAL_TOKEN }}
+    inputs: |
+      message: "blah blah"
+      debug: true
+      meta: |
+        key1: "value1"
+        key2: "value2"
+        key3: "value3"
+```
+
+Which then can be accessed by using `fromJson` function in dispatched workflow:
+```yaml
+  decode-inputs:
+    name: Extra inputs
+    if: ${{ inputs.meta != '' && fromJSON(inputs.meta).workflow_name != '' }}
+    runs-on: ubuntu-latest
+    id: meta
+    steps:
+      - name: Parse meta to outputs
+        run: |
+          echo "key1: ${{ fromJSON(inputs.meta).key1 }}" >> $GITHUB_OUTPUTS
+          echo "key2: ${{ fromJSON(inputs.meta).key2 }}" >> $GITHUB_OUTPUTS
+          echo "key3: ${{ fromJSON(inputs.meta).key3 }}" >> $GITHUB_OUTPUTS
+      - name: Do something
+        run: |
+          echo "key1: ${{ steps.meta.outputs.key1 }}"
+          echo "key2: ${{ steps.meta.outputs.key2 }}"
+          echo "key3: ${{ steps.meta.outputs.key3 }}"
+```
+
+
 # GitHub Action for Dispatching Workflows
 
 This action triggers another GitHub Actions workflow, using the `workflow_dispatch` event.  

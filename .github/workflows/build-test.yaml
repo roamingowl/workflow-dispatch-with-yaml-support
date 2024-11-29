@@ -72,6 +72,30 @@ jobs:
     #     inputs: '{"message": "Mango jam"}'
     #     wait-for-completion: false
 
+  yaml-test:
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    name: "yaml-test"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Download dist
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: dist
+      - name: Invoke echo 3 workflow using this action
+        uses: ./
+        with:
+          workflow: echo-3.yaml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          wait-for-completion: true
+          inputs: | 
+            message: "Mango jam"
+            meta:
+              first_name: John
+              last_name: Doe
+
   long-running-test:
     needs: [build]
     runs-on: ubuntu-latest

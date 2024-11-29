@@ -1,0 +1,40 @@
+name: Message Echo 2
+
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: "Message to echo"
+        required: false
+        default: "this is echo 2"
+      meta:
+        description: 'Meta information to pass to the workflow. JSON string'
+        required: false
+        default: ''
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo message
+        run: echo '${{ github.event.inputs.message }}'
+      - name: Parent info
+        if: ${{ inputs.meta != '' && fromJSON(inputs.meta).workflow_name != '' }}
+        shell: bash
+        run: |
+          echo "Dispatched from ${{ fromJSON(inputs.meta).workflow_name }} in repo ${{ fromJSON(inputs.meta).workflow_repo }}"
+          echo "Follow the dispatcher here: ${{ fromJSON(inputs.meta).workflow_url }}"
+
+      - name: Parse meta to outputs
+        if: ${{ inputs.meta != '' && fromJSON(inputs.meta).workflow_name != '' }}
+        id: meta
+        shell: bash
+        run: |
+          echo "first_name: ${{ fromJSON(inputs.meta).first_name }}" >> $GITHUB_OUTPUTS
+          echo "last_name: ${{ fromJSON(inputs.meta).last_name }}" >> $GITHUB_OUTPUTS
+
+      - name: Print meta
+        if: steps.meta.outputs.first_name != ''
+        run: |
+          echo "first_name: ${{ steps.meta.outputs.first_name }}"
+          echo "last_name: ${{ steps.meta.outputs.last_name }}"  
