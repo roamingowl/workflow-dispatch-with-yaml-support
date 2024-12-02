@@ -29442,20 +29442,23 @@ function parse(inputsJsonOrYaml) {
     if (inputsJsonOrYaml) {
         try {
             const parsedJson = JSON.parse(inputsJsonOrYaml);
-            core.debug('Inputs parsed as YAML');
+            core.debug('Inputs parsed as JSON');
             return parsedJson;
         }
         catch (e) {
             core.debug(`Failed to parse inputs as JSON: ${e.message}`);
         }
-        const parsedInputs = yaml_1.default.parse(inputsJsonOrYaml);
-        if (typeof parsedInputs !== 'object') {
+        const parsedYaml = yaml_1.default.parse(inputsJsonOrYaml);
+        if (typeof parsedYaml !== 'object') {
             const error = new TypeError('Failed to parse \'inputs\' parameter. Must be a valid JSON or YAML.');
             core.setFailed(error);
             throw error;
         }
         core.debug('Inputs parsed as YAML');
-        return parsedInputs;
+        if (parsedYaml.meta && typeof parsedYaml.meta === 'object') {
+            parsedYaml.meta = JSON.stringify(parsedYaml.meta);
+        }
+        return parsedYaml;
     }
     return {};
 }
