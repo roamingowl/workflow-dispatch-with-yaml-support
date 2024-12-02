@@ -31,5 +31,5 @@ jobs:
         id: meta
         shell: bash
         run: |
-          echo "first_name: ${{ fromJSON(inputs.meta).first_name }}"
-          echo "last_name: ${{ fromJSON(inputs.meta).last_name }}"
+          echo "first name: ${{ fromJSON(inputs.meta).first_name }}"
+          echo "last name: ${{ fromJSON(inputs.meta).last_name }}"
