@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
+import YAML from 'yaml'
 
 enum TimeUnit {
   S = 1000,
@@ -17,13 +18,23 @@ function toMilliseconds(timeWithUnit: string): number {
   return time * unit
 }
 
-function parse(inputsJson: string) {
-  if(inputsJson) {
+function parse(inputsJsonOrYaml: string) {
+  if(inputsJsonOrYaml) {
     try {
-      return JSON.parse(inputsJson)
+      const parsedJson = JSON.parse(inputsJsonOrYaml)
+      core.debug('Inputs parsed as YAML')
+      return parsedJson
     } catch(e) {
-      throw new Error(`Failed to parse 'inputs' parameter. Must be a valid JSON.\nCause: ${e}`)
+      core.debug(`Failed to parse inputs as JSON: ${(e as Error).message}`)
     }
+    const parsedInputs = YAML.parse(inputsJsonOrYaml)
+    if (typeof parsedInputs !== 'object') {
+      const error = new TypeError('Failed to parse \'inputs\' parameter. Must be a valid JSON or YAML.');
+      core.setFailed(error)
+      throw error
+    }
+    core.debug('Inputs parsed as YAML')
+    return parsedInputs
   }
   return {}
 }
