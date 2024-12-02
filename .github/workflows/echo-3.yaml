@@ -18,6 +18,7 @@ jobs:
     steps:
       - name: Echo message
         run: echo '${{ github.event.inputs.message }}'
+
       - name: Parent info
         if: ${{ inputs.meta != '' && fromJSON(inputs.meta).workflow_name != '' }}
         shell: bash
@@ -26,7 +27,7 @@ jobs:
           echo "Follow the dispatcher here: ${{ fromJSON(inputs.meta).workflow_url }}"
 
       - name: Parse meta to outputs
-        if: ${{ inputs.meta != '' && fromJSON(inputs.meta).workflow_name != '' }}
+        if: ${{ inputs.meta != '' && fromJSON(inputs.meta) != '' }}
         id: meta
         shell: bash
         run: |
