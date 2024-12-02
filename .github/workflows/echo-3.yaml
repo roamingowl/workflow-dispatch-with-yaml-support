@@ -23,7 +23,7 @@ jobs:
         if: ${{ inputs.meta != '' && fromJSON(inputs.meta).workflow_name != '' }}
         shell: bash
         run: |
-          echo 'Dispatched from [${{ fromJSON(inputs.meta).workflow_name }}](${{ fromJSON(inputs.meta).workflow_url }})) in repo `${{ fromJSON(inputs.meta).workflow_repo }}`' >> $GITHUB_STEP_SUMMARY
+          echo 'Dispatched from [${{ fromJSON(inputs.meta).workflow_name }}](${{ fromJSON(inputs.meta).workflow_url }}) in repo `${{ fromJSON(inputs.meta).workflow_repo }}`' >> $GITHUB_STEP_SUMMARY
 
       - name: Parse meta to outputs
         if: ${{ inputs.meta != '' && fromJSON(inputs.meta) != '' }}
@@ -32,4 +32,4 @@ jobs:
         run: |
           echo "Extra inputs from meta:" >> $GITHUB_STEP_SUMMARY
           echo 'first name: `${{ fromJSON(inputs.meta).first_name }}`'  >> $GITHUB_STEP_SUMMARY
-          echo 'last name: ${{ fromJSON(inputs.meta).last_name }}`' >> $GITHUB_STEP_SUMMARY
+          echo 'last name: `${{ fromJSON(inputs.meta).last_name }}`' >> $GITHUB_STEP_SUMMARY
