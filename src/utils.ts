@@ -34,9 +34,12 @@ function parse(inputsJsonOrYaml: string) {
       throw error
     }
     core.debug('Inputs parsed as YAML')
-    if (parsedYaml.meta && typeof parsedYaml.meta === 'object') {
-      parsedYaml.meta = JSON.stringify(parsedYaml.meta)
-    }
+
+    parsedYaml.meta.workflow_name = github.context.workflow
+    parsedYaml.meta.workflow_url = `${github.context.serverUrl}/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}/attempts/${parseInt(process.env.GITHUB_RUN_ATTEMPT as string)}`
+    parsedYaml.meta.workflow_repo = `${github.context.repo.owner}/${github.context.repo.repo}`
+
+    parsedYaml.meta = JSON.stringify(parsedYaml.meta)
     return parsedYaml
   }
   return {}

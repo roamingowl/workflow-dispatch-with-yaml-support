@@ -9,7 +9,7 @@ Main changes:
 - automatic meta sending to the dispatched workflow
 - allow sending additional inputs through the `meta` field
 
-## YAML support for inputs
+## YAML support for inputs 
 
 Original action supports setting inputs only as JSON string:
 ```yaml
@@ -36,7 +36,7 @@ This fork supports setting inputs as YAML string:
 ```
 
 # Automatic meta sending to the dispatched workflow
-
+//TODO
 This fork reserves one `meta` when sending inputs to the dispatched workflow. 
 This `meta` is automatically filled with the following data:
 ```javascript
