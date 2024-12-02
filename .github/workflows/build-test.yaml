@@ -5,6 +5,10 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -41,7 +45,7 @@ jobs:
       uses: ./
       with:
         workflow: Message Echo 1
-        token: ${{ secrets.PERSONAL_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         inputs: '{"message": "blah blah"}'
         wait-for-completion: false
 
@@ -61,7 +65,7 @@ jobs:
       uses: ./
       with:
         workflow: echo-2.yaml
-        token: ${{ secrets.PERSONAL_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         wait-for-completion: false
 
     # - name: Invoke echo 1 workflow by id
@@ -113,7 +117,7 @@ jobs:
       uses: ./
       with:
         workflow: long-running.yml
-        token: ${{ secrets.PERSONAL_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         wait-for-completion-interval: 10s
         wait-for-completion-timeout: 5m
         display-workflow-run-url-interval: 10s
@@ -145,7 +149,7 @@ jobs:
       uses: ./
       with:
         workflow: failing.yml
-        token: ${{ secrets.PERSONAL_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         wait-for-completion-interval: 10s
         wait-for-completion-timeout: 60s
         display-workflow-run-url-interval: 10s
@@ -178,7 +182,7 @@ jobs:
       uses: ./
       with:
         workflow: timeout.yml
-        token: ${{ secrets.PERSONAL_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         wait-for-completion-interval: 10s
         wait-for-completion-timeout: 30s
         display-workflow-run-url-interval: 10s
@@ -210,7 +214,7 @@ jobs:
       uses: ./
       with:
         workflow: retrieve-logs.yml
-        token: ${{ secrets.PERSONAL_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         wait-for-completion-interval: 10s
         wait-for-completion-timeout: 120s
         display-workflow-run-url-interval: 10s
@@ -260,7 +264,7 @@ jobs:
         uses: ./
         with:
           workflow: named-run.yml
-          token: ${{ secrets.PERSONAL_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           run-name: ${{ env.RUN_NAME }}
           wait-for-completion-interval: 10s
           wait-for-completion-timeout: 120s
