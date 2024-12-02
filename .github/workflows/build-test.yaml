@@ -94,6 +94,7 @@ jobs:
           workflow: echo-3.yaml
           token: ${{ secrets.GITHUB_TOKEN }}
           wait-for-completion: true
+          display-workflow-run-url: true
           inputs: | 
             message: "Mango jam"
             meta:
