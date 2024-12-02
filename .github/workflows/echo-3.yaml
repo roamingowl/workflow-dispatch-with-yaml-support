@@ -31,11 +31,5 @@ jobs:
         id: meta
         shell: bash
         run: |
-          echo "first_name: ${{ fromJSON(inputs.meta).first_name }}" >> $GITHUB_OUTPUTS
-          echo "last_name: ${{ fromJSON(inputs.meta).last_name }}" >> $GITHUB_OUTPUTS
-
-      - name: Print meta
-        if: steps.meta.outputs.first_name != ''
-        run: |
-          echo "first_name: ${{ steps.meta.outputs.first_name }}"
-          echo "last_name: ${{ steps.meta.outputs.last_name }}"  
+          echo "first_name: ${{ fromJSON(inputs.meta).first_name }}"
+          echo "last_name: ${{ fromJSON(inputs.meta).last_name }}"
