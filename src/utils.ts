@@ -20,25 +20,36 @@ function toMilliseconds(timeWithUnit: string): number {
 
 function parse(inputsJsonOrYaml: string) {
   if(inputsJsonOrYaml) {
+    //let's try to parse JSON first
     try {
       const parsedJson = JSON.parse(inputsJsonOrYaml)
+      //okay it was a valid JSON
       core.debug('Inputs parsed as JSON')
       return parsedJson
     } catch(e) {
       core.debug(`Failed to parse inputs as JSON: ${(e as Error).message}`)
     }
+    //ok, it wasn't a valid JSON, let's try again with YAML
     const parsedYaml = YAML.parse(inputsJsonOrYaml)
     if (typeof parsedYaml !== 'object') {
+      //inputs must be an object, otherwise it doesn't make sense
       const error = new TypeError('Failed to parse \'inputs\' parameter. Must be a valid JSON or YAML.');
       core.setFailed(error)
       throw error
     }
     core.debug('Inputs parsed as YAML')
-
+    //ok inputs were parsed as YAML
+    if (!parsedYaml.meta) {
+      //if there was no `meta` input, initialize it
+      parsedYaml.meta = {}
+    }
+    //add info about self, for dispatched workflow
     parsedYaml.meta.workflow_name = github.context.workflow
     parsedYaml.meta.workflow_url = `${github.context.serverUrl}/${github.context.repo.owner}/${github.context.repo.repo}/actions/runs/${github.context.runId}/attempts/${parseInt(process.env.GITHUB_RUN_ATTEMPT as string)}`
     parsedYaml.meta.workflow_repo = `${github.context.repo.owner}/${github.context.repo.repo}`
 
+    //stringify inputs back, because those are sent
+    //to the dispatched workflow through REST call
     parsedYaml.meta = JSON.stringify(parsedYaml.meta)
     return parsedYaml
   }

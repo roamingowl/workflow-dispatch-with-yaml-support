@@ -2,7 +2,7 @@
 
 This repo was **copied** from [the-actions-org/workflow-dispatch-and-wait](https://github.com/marketplace/actions/workflow-dispatch-and-wait) repo and is an example for blog post ...TODO...
 
-> Note: I didn't fork it because then you cant play with workflows. 
+> Note: I didn't fork it because then you can't play with workflows. 
 
 Main changes:
 - add YAML support for inputs
