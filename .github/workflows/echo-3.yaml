@@ -1,4 +1,4 @@
-name: Message Echo 2
+name: Message Echo 3
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
       message:
         description: "Message to echo"
         required: false
-        default: "this is echo 2"
+        default: "this is echo 3"
       meta:
         description: 'Meta information to pass to the workflow. JSON string'
         required: false
@@ -30,6 +30,7 @@ jobs:
         id: meta
         shell: bash
         run: |
+          echo 'Message: ${{inputs.message}}' >> $GITHUB_STEP_SUMMARY
           echo "Extra inputs from meta:" >> $GITHUB_STEP_SUMMARY
-          echo 'first name: `${{ fromJSON(inputs.meta).first_name }}`'  >> $GITHUB_STEP_SUMMARY
-          echo 'last name: `${{ fromJSON(inputs.meta).last_name }}`' >> $GITHUB_STEP_SUMMARY
+          echo '- first name: `${{ fromJSON(inputs.meta).first_name }}`'  >> $GITHUB_STEP_SUMMARY
+          echo '- last name: `${{ fromJSON(inputs.meta).last_name }}`' >> $GITHUB_STEP_SUMMARY
