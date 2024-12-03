@@ -36,7 +36,7 @@ This fork supports setting inputs as YAML string:
 ```
 
 # Automatic meta sending to the dispatched workflow
-//TODO
+
 This fork reserves one `meta` when sending inputs to the dispatched workflow. 
 This `meta` is automatically filled with the following data:
 ```javascript
@@ -47,11 +47,11 @@ This `meta` is automatically filled with the following data:
 }
 ```
 
-Dispatched workflow is then able to access this data by using `fromJson` function:
+Dispatched workflow is then able to access this data by using simple `fromJson` function:
 ```yaml
   parent-info:
     name: Parent Info
-    if: ${{ inputs.meta != '' && fromJSON(inputs.meta).workflow_name != '' }}
+    if: ${{ inputs.meta != '' && fromJSON(inputs.meta) != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: Show parent info
@@ -91,11 +91,6 @@ Which then can be accessed by using `fromJson` function in dispatched workflow:
           echo "key1: ${{ fromJSON(inputs.meta).key1 }}" >> $GITHUB_OUTPUTS
           echo "key2: ${{ fromJSON(inputs.meta).key2 }}" >> $GITHUB_OUTPUTS
           echo "key3: ${{ fromJSON(inputs.meta).key3 }}" >> $GITHUB_OUTPUTS
-      - name: Do something
-        run: |
-          echo "key1: ${{ steps.meta.outputs.key1 }}"
-          echo "key2: ${{ steps.meta.outputs.key2 }}"
-          echo "key3: ${{ steps.meta.outputs.key3 }}"
 ```
 
 
