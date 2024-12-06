@@ -1,6 +1,6 @@
 # ⚠️ INFO ⚠️
 
-This repo was **copied** from [the-actions-org/workflow-dispatch-and-wait](https://github.com/marketplace/actions/workflow-dispatch-and-wait) repo and is an example for blog post ...TODO...
+This repo was **copied** from [the-actions-org/workflow-dispatch-and-wait](https://github.com/marketplace/actions/workflow-dispatch-and-wait) repo and is an example for blog post [How to Send More Than Ten Inputs with Workflow Dispatch](https://jurajsim.hashnode.dev/how-to-send-more-than-ten-inputs-with-workflow-dispatch)
 
 > Note: I didn't fork it because then you can't play with workflows. 
 
